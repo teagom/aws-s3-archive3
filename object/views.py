@@ -30,13 +30,11 @@ def compress(request, days):
     # download
     tmp_filename = u"%s.zip" % uuid4()
     tmp_foldername = u"%s" % uuid4()
-    tmp_folder = '/tmp/%s' % tmp_foldername
-    cmd = 'mkdir %s' % tmp_folder
+    tmp_folder = '%s/%s' % (settings.TEMPORARY_DS_ROOT, tmp_foldername)
+    cmd = 'mkdir -p %s' % tmp_folder
     os.system(cmd)
-
-    # download
     dwn_content = '' # conteudo do download, zip.
-    dwn_zip_file = "/tmp/%s" % (tmp_filename)
+    dwn_zip_file = "%s/%s" % (tmp_folder, tmp_filename)
 
     if request.session['my_selected_objs']:
         dwn_content += u"Days to expiry %s\n" % days
@@ -75,13 +73,13 @@ def compress(request, days):
         cmd = "/usr/bin/zip -9r %s %s" % (dwn_zip_file, tmp_folder)
         os.system(cmd)
 
-        # delete tmp files
-        cmd = "rm %s/*" % tmp_folder
-        os.system(cmd)
-
         # s3://<bucket>/folder/file.zip
         bucket_dest = u"%s/%s/%s" % (settings.AWS_BUCKET_S3, tmp_foldername, tmp_filename)
         cmd = "/usr/local/bin/aws s3 cp %s %s" % (dwn_zip_file, bucket_dest)
+        os.system(cmd)
+
+        # delete tmp zip file after copied to bucket
+        cmd = "rm %s" % dwn_zip_file
         os.system(cmd)
 
         # set public

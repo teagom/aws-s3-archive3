@@ -61,7 +61,8 @@ class Download(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, verbose_name='Usuário', on_delete=models.RESTRICT)
     key = models.CharField(u'File', max_length=255, blank=False, null=False, help_text='S3path at bucket')
     content = models.TextField(u'Content', blank=True, null=True)
-    url = models.CharField(u'Download URL', max_length=255, help_text="Public URL for download")
+    url = models.CharField(u'URL', max_length=255, help_text="Public URL for download")
+    download_url = models.CharField(u'Download URL', max_length=255, help_text="Public URL for download", default='off')
     expiry_link = models.DateTimeField('Expiry', default=timezone.now, blank=False, null=False)
     counter = models.IntegerField(u'Download Counter', default=0)
 
