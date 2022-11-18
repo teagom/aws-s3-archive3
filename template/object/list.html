@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en-us" >
+    <head>
+        <title>My Selected Object</title>
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="/static/admin/css/changelists.css" />
+        <script type="text/javascript" src="/admin/jsi18n/"></script>
+
+        <script type="text/javascript" src="/static/admin/js/core.js"></script>
+        <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+        <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+        <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+        <script type="text/javascript" src="/static/admin/js/actions.js"></script>
+        <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+        <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+        <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+        <meta name="robots" content="NONE,NOARCHIVE" />
+    </head>
+
+    <body class=" app-object model-object change-list" data-admin-utc-offset="0">
+
+    <!-- Container -->
+    <div id="container">
+
+        <!-- Header -->
+        <div id="header">
+            <div id="branding">
+                <h1 id="site-name"><a href="/mylist/">Archive - EditoraCubo</a></h1>
+            </div>
+        </div>
+        <!-- END Header -->
+
+        <!-- messages -->
+        {% if messages %}
+            <ul class="messagelist">
+            {% for m in messages %}
+                {% ifequal m.tags 'success' %}
+                    <li class="success">{{ m|safe }}</li>
+                {% endifequal %}
+
+                {% ifequal m.tags 'error' %}
+                    <li class="error">{{ m|safe }}</li>
+                {% endifequal %}
+
+                {% ifequal m.tags 'warning' %}
+                    <li class="warning">{{ m|safe }}</a></li>
+                {% endifequal %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+
+        <!-- Content -->
+        <div id="content" class="flex">
+            <h1>My Selected Objects to download - Total {{ total }}</h1>
+            <div id="content-main">
+        </div>
+
+        <form id="changelist-form" method="post" novalidate="" action='/mylist/action/'>
+            {% csrf_token %}
+            <div class="actions">
+                <label>Action:
+                    <select name="action">
+                      <option value="my_list_remove_obj">Minha lista - Remover objecto selecionado</option>
+                      <option value="my_list_clean">Minha lista - Remover todos os objectos</option>
+                      <option value="compress3">Minha lista - Compactar e download v&aacute;lido por 3 dias</option>
+                      <option value="compress7">Minha lista - Compactar e download v&aacute;lido por 7 dias</option>
+                      <option value="compress10">Minha lista - Compactar e download v&aacute;lido por 10 dias</option>
+                      <option value="compress14">Minha lista - Compactar e download v&aacute;lido por 14 dias</option>
+                  </select>
+                </label>
+
+                <input type="hidden" name="select_across" value="0" class="select-across">
+                <button type="submit" class="button" title="Run the selected action" name="index" value="0">Go</button>
+            </div>
+
+            <!-- Resul -->
+            <div class="results">
+                <table id="result_list">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>Bucket</span></div>
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>Key</span></div>
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>Format</span></div>
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>Size</span></div>
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>ETag</span></div>
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>ID</span></div>
+                            </th>
+
+                            <th scope="col">
+                                <div class="text"><span>StorageClass</span></div>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for o in list %}
+                            <tr class="row1">
+                                <td class="action-checkbox">
+                                    <input type="checkbox" name="selected_obj" value="{{ o.id }}" class="action-select">
+                                </td>
+                                <th class="field-bucket nowrap">
+                                    <a href="/admin/object/object/{{ o.id }}/change/">{{ o.bucket }}</a>
+                                </th>
+                                <td class="field-key">
+                                    {{ o.key }}<br />
+
+                                    {% comment %}
+                                        input radio name="objectID" value="level-integer"
+                                    {% endcomment %}
+
+                                    {% for x in o.get_split_ %}
+                                        {{ x }}
+                                        {% if forloop.last %}
+                                            <input type="radio" name='object{{ o.id }}' value="{{ forloop.counter }}" class="action-select" checked>
+                                        {% else %}
+                                            <input type="radio" name='object{{ o.id }}' value="{{ forloop.counter }}" class="action-select">
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td class="field-key_extension">{{ o.key_extension }}</td>
+                                <td class="field-size_easy">{{ o.size_easy }}</td>
+                                <td class="field-etag">{{ o.etag }}</td>
+                                <td class="field-id">{{ o.id }}</td>
+                                <td class="field-storageclass">{{ o.storageclass }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <!-- END result -->
+
+    </div>
+    <!-- END Container -->
+
+    </body>
+</html>

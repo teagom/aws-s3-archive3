@@ -1,0 +1,7 @@
+{% for c in content %}
+    {% if search in c %}
+        <p class="bg-success text-white"><i>{{ c }}</i></p>
+    {% else %}
+        <p>{{ c }}</p>
+    {% endif %}
+{% endfor %}
