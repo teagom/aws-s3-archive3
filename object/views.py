@@ -85,8 +85,8 @@ def compress(request, days):
         #cmd = "rm %s" % dwn_zip_file
         #os.system(cmd)
         # delete tmp folder and content
-        cmd = 'rm -rf %s' % tmp_folder
-        os.system(cmd)
+        #cmd = 'rm -rf %s' % tmp_folder
+        #os.system(cmd)
 
         # set public
         key = "%s/%s" % (tmp_foldername, tmp_filename)
