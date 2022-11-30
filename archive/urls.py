@@ -31,7 +31,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 urlpatterns = [
-    url(r'', index),
+    url(r'^$', index),
     url(r'^admin/', admin.site.urls),
     url(r'^mylist/$', login_required(my_list)),
     url(r'^mylist/action/$', login_required(my_list_action)),
