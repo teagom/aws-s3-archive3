@@ -69,6 +69,6 @@ class Download(models.Model):
         return u"%s" % self.id
 
     class Meta:
-        ordering = ['date_join']
+        ordering = ['-date_join']
         verbose_name = ('Download')
         verbose_name_plural = ('Downloads')
