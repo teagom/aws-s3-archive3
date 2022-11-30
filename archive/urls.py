@@ -19,11 +19,19 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
+from django.http import HttpResponse
+from django.template import loader
 
 from object.views import my_list, my_list_action
 from object.api import show_compress_content
 
+def index(request):
+    template = loader.get_template('index.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 urlpatterns = [
+    url(r'', index),
     url(r'^admin/', admin.site.urls),
     url(r'^mylist/$', login_required(my_list)),
     url(r'^mylist/action/$', login_required(my_list_action)),
