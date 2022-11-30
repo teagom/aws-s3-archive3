@@ -80,7 +80,7 @@ def compress(request, days):
 
         # delete tmp folder and content
         # talvez seja criado dentro do caminho, updatedb não encontra, usar find . -name file.zip
-        # /tmp/systemd-private-xyz-apache2.service/tmp/archive.editoracubo.com.br/temporary/<uuid4>/<uuid4>.zip
+        # /tmp/systemd-private-xyz-apache2.service/tmp/archive/temporary/<folder>/<file>.zip
         # delete tmp file
         #cmd = "rm %s" % dwn_zip_file
         #os.system(cmd)
