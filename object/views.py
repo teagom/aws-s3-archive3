@@ -78,8 +78,14 @@ def compress(request, days):
         cmd = "/usr/local/bin/aws s3 cp %s %s" % (dwn_zip_file, bucket_dest)
         os.system(cmd)
 
-        # delete tmp zip file after copied to bucket
-        cmd = "rm %s" % dwn_zip_file
+        # delete tmp folder and content
+        # talvez seja criado dentro do caminho, updatedb não encontra, usar find . -name file.zip
+        # /tmp/systemd-private-xyz-apache2.service/tmp/archive.editoracubo.com.br/temporary/<uuid4>/<uuid4>.zip
+        # delete tmp file
+        #cmd = "rm %s" % dwn_zip_file
+        #os.system(cmd)
+        # delete tmp folder and content
+        cmd = 'rm -rf %s' % tmp_folder
         os.system(cmd)
 
         # set public
@@ -95,6 +101,7 @@ def compress(request, days):
         d.content = dwn_content
         d.expiry_link = date.today() + timedelta(days)
         d.save()
+
         link = format_html('<a target="_blank" href="{}">Download {} </a>', d.url, d.url)
 
         # clean my selected objects
